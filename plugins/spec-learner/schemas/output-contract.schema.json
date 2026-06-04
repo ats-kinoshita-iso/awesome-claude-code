@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://awesome-claude-code/spec-learner/output-contract.schema.json",
+  "title": "Output Contract (meta-schema notes)",
+  "description": "Guidance, not a validator. Each task produces its own concrete output.schema.json; this document records the rules those per-task schemas must follow so every backend's harness can validate output identically.",
+  "type": "object",
+  "properties": {
+    "requirements": {
+      "type": "array",
+      "description": "Rules every per-task output.schema.json must satisfy.",
+      "items": { "type": "string" },
+      "default": [
+        "Be a valid JSON Schema (draft-07) document.",
+        "Set additionalProperties:false on objects whose shape is fixed, so malformed extra fields fail loud.",
+        "Mark every field the spec considers required as required.",
+        "Encode the structural acceptance criteria (ordering, length, field equality constraints) wherever JSON Schema can express them, so the harness's non-zero-exit-on-violation contract enforces them.",
+        "Contain no instance-specific constant values unless the corresponding input field is marked 'fixed' in the pattern-spec."
+      ]
+    }
+  }
+}
