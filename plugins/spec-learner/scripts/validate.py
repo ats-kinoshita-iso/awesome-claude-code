@@ -5,11 +5,10 @@ Usage:
     python validate.py <pattern-spec.json>
 
 Exits non-zero on any schema violation or cross-field inconsistency, so callers
-can fail loud. Beyond JSON-Schema validation it enforces two invariants the
-schema alone cannot express:
+can fail loud. Field-level rules (required names, the variable/fixed split) are
+already enforced by the JSON Schema. Beyond that, this validator adds the one
+cross-field invariant the schema cannot express:
   - semantic_steps must reference step ids whose kind is "semantic"
-  - every input field marked "variable" must carry a name (a harness input
-    dimension); fields are checked for the variable/fixed split.
 """
 import json
 import sys

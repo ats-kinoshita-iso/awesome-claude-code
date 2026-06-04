@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://awesome-claude-code/spec-learner/output-contract.schema.json",
+  "$id": "https://github.com/ats-kinoshita-iso/spec-learner/schemas/output-contract.schema.json",
   "title": "Output Contract (meta-schema notes)",
   "description": "Guidance, not a validator. Each task produces its own concrete output.schema.json; this document records the rules those per-task schemas must follow so every backend's harness can validate output identically.",
   "type": "object",

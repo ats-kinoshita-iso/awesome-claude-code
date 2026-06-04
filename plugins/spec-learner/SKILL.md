@@ -102,9 +102,9 @@ Map the brief's tests onto evaluation-driven development. See
 - **Check types:** structural/contract criteria (field equality, ordering,
   length, schema conformance) are deterministic asserts and must hold on
   perturbed inputs. Genuinely qualitative criteria go to the bundled judge
-  subagent (`${CLAUDE_PLUGIN_ROOT}/agents/judge.md`), which returns a
-  schema-validated `{text, passed, evidence}`. Do not route structural criteria
-  to the judge.
+  subagent (`${CLAUDE_PLUGIN_ROOT}/agents/judge.md`), which returns each
+  criterion as `{text, passed, evidence}` inside an `expectations[]` array. Do
+  not route structural criteria to the judge.
   Helper: `${CLAUDE_PLUGIN_ROOT}/scripts/verify.py`.
 
 When a perturbed failure forces a spec/harness change, append a brief,

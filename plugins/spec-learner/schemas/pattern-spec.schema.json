@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://awesome-claude-code/spec-learner/pattern-spec.schema.json",
+  "$id": "https://github.com/ats-kinoshita-iso/spec-learner/schemas/pattern-spec.schema.json",
   "title": "Pattern Spec (backend-neutral IR)",
   "description": "Authoritative intermediate representation that backends compile into a concrete harness. Separates the invariant pattern from instance-specific values.",
   "type": "object",

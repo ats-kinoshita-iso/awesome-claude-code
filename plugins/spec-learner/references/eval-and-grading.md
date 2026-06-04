@@ -19,12 +19,13 @@ Each acceptance criterion in the IR is tagged `check_type`:
   conformance). Must hold on **both** golden and perturbed inputs. Lives in the
   backend's native runner (pytest / vitest) and in the harness's own
   non-zero-exit-on-schema-violation contract.
-- `qualitative` → the judge subagent (`../agents/judge.md`), which returns a
-  schema-validated `{text, passed, evidence}`.
+- `qualitative` → the judge subagent (`../agents/judge.md`), which returns each
+  criterion as `{text, passed, evidence}` inside an `expectations[]` array
+  (with a `summary`) — see `../agents/judge.md` for the full envelope.
 
 ## Grading shapes (reuse verbatim)
 
-Per-criterion result:
+Per-criterion result (one item inside the judge's `expectations[]` array):
 
 ```json
 { "text": "<criterion>", "passed": true, "evidence": "<=125 chars" }
