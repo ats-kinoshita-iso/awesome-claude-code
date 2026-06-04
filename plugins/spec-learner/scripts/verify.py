@@ -16,6 +16,7 @@ produced it, then runs ``backend.verify(out_dir)``:
 A perturbed failure means fix the harness or the spec -- never loosen the test.
 Exits non-zero if verification fails, so callers can gate on it.
 """
+
 from __future__ import annotations
 
 import argparse

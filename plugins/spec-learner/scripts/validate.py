@@ -10,6 +10,7 @@ already enforced by the JSON Schema. Beyond that, this validator adds the one
 cross-field invariant the schema cannot express:
   - semantic_steps must reference step ids whose kind is "semantic"
 """
+
 import json
 import sys
 from pathlib import Path

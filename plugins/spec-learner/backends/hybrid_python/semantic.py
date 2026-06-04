@@ -9,6 +9,7 @@ into a harness that has semantic steps. ``client`` is injectable so the call can
 be unit-tested offline with a mock (no API key required); the real Anthropic SDK
 is imported lazily only when no client is supplied.
 """
+
 from __future__ import annotations
 
 import json
@@ -25,11 +26,7 @@ def _default_client():  # pragma: no cover - exercised only with a real API key
 
 def _extract_text(message: Any) -> str:
     """Concatenate the text blocks of an Anthropic message."""
-    parts = [
-        block.text
-        for block in message.content
-        if getattr(block, "type", None) == "text"
-    ]
+    parts = [block.text for block in message.content if getattr(block, "type", None) == "text"]
     return "".join(parts)
 
 

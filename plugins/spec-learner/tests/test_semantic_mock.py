@@ -3,11 +3,11 @@
 No API key is needed -- a fake client injects the model response, so we can prove
 the schema gate (valid -> dict; invalid/non-JSON -> raise) without the SDK.
 """
+
 import json
 
 import jsonschema
 import pytest
-
 from backends.hybrid_python import semantic
 
 _SCHEMA = {

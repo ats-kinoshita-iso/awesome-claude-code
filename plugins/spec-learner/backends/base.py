@@ -12,6 +12,7 @@ brief:
 Keeping this interface stable is what lets new backends (TypeScript, the M3
 agentic-claude-code recipe) slot in without touching existing code.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

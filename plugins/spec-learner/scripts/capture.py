@@ -16,6 +16,7 @@ output, and the relevant session steps/tool calls (ignoring dead ends/retries).
 Status: Milestone-1 stub. Transcript ingest lands in Milestone 2 once the
 transcript format is confirmed with the user.
 """
+
 import sys
 
 print("capture.py is a Milestone-1 stub; transcript ingest arrives in M2.", file=sys.stderr)

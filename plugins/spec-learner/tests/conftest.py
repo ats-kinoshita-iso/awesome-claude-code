@@ -1,4 +1,5 @@
 """Make the plugin root (and scripts/) importable for the plugin test suite."""
+
 import sys
 from pathlib import Path
 

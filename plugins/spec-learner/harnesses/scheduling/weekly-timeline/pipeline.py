@@ -7,6 +7,7 @@ are constants below. No value the spec marks 'variable' is hardcoded here.
 Variable inputs (harness dimensions): target_date, unavailable_resources
 Fixed inputs (constants): week_start, roster
 """
+
 from __future__ import annotations
 
 import datetime

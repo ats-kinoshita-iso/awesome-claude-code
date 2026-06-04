@@ -21,7 +21,11 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: pip install jsonschema pytest
+        run: pip install jsonschema pytest ruff
+      - name: Lint (ruff, matching the repo's pre-commit)
+        run: |
+          ruff check plugins/spec-learner
+          ruff format --check plugins/spec-learner
       - name: Validate the example spec
         run: python plugins/spec-learner/scripts/validate.py plugins/spec-learner/examples/scheduling/pattern-spec.json
       - name: Run the plugin test suite

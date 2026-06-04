@@ -17,6 +17,7 @@ The scaffold is deterministic plumbing; the deterministic step bodies and the
 structural test assertions are then filled in from the spec (look for the
 ``TODO(spec-learner)`` markers).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -57,7 +58,9 @@ def main(argv: list[str] | None = None) -> int:
     backend.emit(spec, out_dir, spec_path=spec_path)
     backend.emit_tests(spec, out_dir, spec_path=spec_path)
 
-    variable = [f["name"] for f in spec["input_contract"]["fields"] if f["variability"] == "variable"]
+    variable = [
+        f["name"] for f in spec["input_contract"]["fields"] if f["variability"] == "variable"
+    ]
     fixed = [f["name"] for f in spec["input_contract"]["fields"] if f["variability"] == "fixed"]
     print(f"backend: {backend.name}  (score {backend.supports(spec)})")
     print(f"emitted harness -> {out_dir}")

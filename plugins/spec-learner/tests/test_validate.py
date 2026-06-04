@@ -1,4 +1,5 @@
 """validate.py: the example spec passes; a cross-field violation fails loud."""
+
 import json
 import subprocess
 import sys

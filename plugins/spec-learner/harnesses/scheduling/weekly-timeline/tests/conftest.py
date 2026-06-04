@@ -1,4 +1,5 @@
 """Put the harness root on sys.path so tests can ``import pipeline``."""
+
 import sys
 from pathlib import Path
 

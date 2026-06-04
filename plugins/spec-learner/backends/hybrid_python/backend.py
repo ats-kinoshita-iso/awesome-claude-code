@@ -8,6 +8,7 @@ model writes logic). ``semantic`` steps become a schema-validated ``semantic.cal
 and the harness pulls in ``semantic.py``; a spec with no semantic step degrades to
 pure code (no SDK dependency).
 """
+
 from __future__ import annotations
 
 import json
@@ -151,17 +152,14 @@ def _render_pipeline(spec: dict) -> str:
             lines.append("    from semantic import call")
             lines.append("")
             lines.append("    # TODO(spec-learner): build the payload + out_schema for this step.")
-            lines.append(
-                f'    state[{step["id"]!r}] = call('
-            )
+            lines.append(f"    state[{step['id']!r}] = call(")
             lines.append(f'        prompt=(_PROMPTS / "{step["id"]}.txt").read_text(),')
-            lines.append("        payload=state[\"input\"],")
+            lines.append('        payload=state["input"],')
             lines.append("        out_schema={},  # TODO: the step's output schema")
             lines.append("    )")
         else:
-            lines.append(
-                f"    raise NotImplementedError(\"TODO(spec-learner): implement step {step['id']!r}\")"
-            )
+            msg = f"TODO(spec-learner): implement step {step['id']!r}"
+            lines.append(f"    raise NotImplementedError({msg!r})")
         lines.append("")
         lines.append("")
 
@@ -177,9 +175,7 @@ def _render_pipeline(spec: dict) -> str:
 
 
 def _render_test_golden(spec: dict) -> str:
-    structural = [
-        c["text"] for c in spec["acceptance_criteria"] if c["check_type"] == "structural"
-    ]
+    structural = [c["text"] for c in spec["acceptance_criteria"] if c["check_type"] == "structural"]
     crit = "\n".join(f"    #   - {t}" for t in structural) or "    #   (none tagged structural)"
     return (
         '"""Golden test: the pattern on the original approved input.\n\n'
@@ -189,20 +185,18 @@ def _render_test_golden(spec: dict) -> str:
         "import json\n"
         "from pathlib import Path\n\n"
         "import pipeline\n\n"
-        "_INPUTS = Path(__file__).resolve().parent / \"inputs\"\n\n\n"
+        '_INPUTS = Path(__file__).resolve().parent / "inputs"\n\n\n'
         "def test_golden():\n"
         '    data = json.loads((_INPUTS / "golden.json").read_text())\n'
         "    result = pipeline.run(data)\n"
         "    # Structural acceptance criteria to assert:\n"
         f"{crit}\n"
-        "    raise AssertionError(\"TODO(spec-learner): implement golden assertions\")\n"
+        '    raise AssertionError("TODO(spec-learner): implement golden assertions")\n'
     )
 
 
 def _render_test_perturbed(spec: dict) -> str:
-    structural = [
-        c["text"] for c in spec["acceptance_criteria"] if c["check_type"] == "structural"
-    ]
+    structural = [c["text"] for c in spec["acceptance_criteria"] if c["check_type"] == "structural"]
     crit = "\n".join(f"    #   - {t}" for t in structural) or "    #   (none tagged structural)"
     return (
         '"""Perturbed test: the same pattern on a DIFFERENT input.\n\n'
@@ -213,13 +207,13 @@ def _render_test_perturbed(spec: dict) -> str:
         "import json\n"
         "from pathlib import Path\n\n"
         "import pipeline\n\n"
-        "_INPUTS = Path(__file__).resolve().parent / \"inputs\"\n\n\n"
+        '_INPUTS = Path(__file__).resolve().parent / "inputs"\n\n\n'
         "def test_perturbed():\n"
         '    data = json.loads((_INPUTS / "perturbed.json").read_text())\n'
         "    result = pipeline.run(data)\n"
         "    # Structural acceptance criteria to assert (must hold here too):\n"
         f"{crit}\n"
-        "    raise AssertionError(\"TODO(spec-learner): implement perturbed assertions\")\n"
+        '    raise AssertionError("TODO(spec-learner): implement perturbed assertions")\n'
     )
 
 
@@ -233,14 +227,20 @@ def _golden_input_from_examples(spec: dict) -> dict:
 
 
 def _render_readme(spec: dict) -> str:
-    variable = "\n".join(
-        f"- `{f['name']}` ({f['type']}) — {f.get('description', '')}".rstrip()
-        for f in _variable_fields(spec)
-    ) or "- (none)"
-    fixed = "\n".join(
-        f"- `{f['name']}` = `{f.get('example', '')}` — {f.get('description', '')}".rstrip()
-        for f in _fixed_fields(spec)
-    ) or "- (none)"
+    variable = (
+        "\n".join(
+            f"- `{f['name']}` ({f['type']}) — {f.get('description', '')}".rstrip()
+            for f in _variable_fields(spec)
+        )
+        or "- (none)"
+    )
+    fixed = (
+        "\n".join(
+            f"- `{f['name']}` = `{f.get('example', '')}` — {f.get('description', '')}".rstrip()
+            for f in _fixed_fields(spec)
+        )
+        or "- (none)"
+    )
     return (
         f"# Harness: {spec.get('domain', 'task')}/{spec.get('task', 'harness')}\n\n"
         f"{spec['intent']}\n\n"
@@ -285,7 +285,9 @@ class HybridPythonBackend:
         (out_dir / "pipeline.py").write_text(_render_pipeline(spec))
         (out_dir / "README.md").write_text(_render_readme(spec))
 
-        _copy_alongside(spec_path, spec["output_contract"]["schema_ref"], out_dir / "output.schema.json")
+        _copy_alongside(
+            spec_path, spec["output_contract"]["schema_ref"], out_dir / "output.schema.json"
+        )
         if spec_path is not None:
             (out_dir / "pattern-spec.json").write_text(spec_path.read_text())
 

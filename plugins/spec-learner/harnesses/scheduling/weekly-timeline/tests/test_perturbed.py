@@ -4,6 +4,7 @@ Asserts the structural invariants (NOT equality to the golden output) -- this is
 the generalization proof. A failure here means fix the harness or the spec --
 never loosen the test.
 """
+
 import datetime
 import json
 from pathlib import Path

@@ -3,6 +3,7 @@
 Selection is by highest ``supports(spec)`` score. Add a backend by appending it
 to ``BACKENDS`` -- nothing else changes.
 """
+
 from __future__ import annotations
 
 from .base import Backend

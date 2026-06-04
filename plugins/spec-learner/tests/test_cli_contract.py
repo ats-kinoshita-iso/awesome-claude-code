@@ -1,6 +1,7 @@
 """The uniform CLI contract: valid input -> schema-valid output (exit 0); a
 schema-violating output -> non-zero exit (fail loud, never emit malformed output).
 """
+
 import json
 import subprocess
 import sys

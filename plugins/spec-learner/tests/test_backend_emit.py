@@ -1,4 +1,5 @@
 """hybrid-python backend: emit produces the expected scaffold + scoring."""
+
 import json
 from pathlib import Path
 

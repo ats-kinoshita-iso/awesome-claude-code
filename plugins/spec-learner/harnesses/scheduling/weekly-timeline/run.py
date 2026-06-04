@@ -7,6 +7,7 @@ Reads the variable inputs as JSON (``-`` = stdin), runs the ordered pipeline,
 validates the result against ``output.schema.json``, and exits non-zero on any
 schema violation. It never writes malformed output.
 """
+
 from __future__ import annotations
 
 import argparse

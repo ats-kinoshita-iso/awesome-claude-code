@@ -4,6 +4,7 @@ Asserts the spec's structural acceptance_criteria, schema conformance, and the
 exact expected output (the regression anchor). The same invariants are checked on
 a different input in test_perturbed.py.
 """
+
 import json
 from pathlib import Path
 
