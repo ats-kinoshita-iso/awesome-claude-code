@@ -1,0 +1,59 @@
+{
+  "spec_version": "0.1.0",
+  "intent": "Extract temporal fields and resource availability from a request, apply resource-availability constraints, and render the result as a weekly timeline.",
+  "domain": "scheduling",
+  "task": "weekly-timeline",
+  "input_contract": {
+    "fields": [
+      {
+        "name": "target_date",
+        "type": "date",
+        "variability": "variable",
+        "description": "Any date within the week to schedule.",
+        "example": "2026-06-14"
+      },
+      {
+        "name": "unavailable_resources",
+        "type": "array",
+        "variability": "variable",
+        "description": "Resources (people/rooms) that are off and must not be assigned.",
+        "example": ["Alice", "Bob"]
+      },
+      {
+        "name": "week_start",
+        "type": "string",
+        "variability": "fixed",
+        "description": "Weeks always start on Monday.",
+        "example": "Monday"
+      },
+      {
+        "name": "roster",
+        "type": "array",
+        "variability": "fixed",
+        "description": "The standing pool of assignable resources for this team.",
+        "example": ["Alice", "Bob", "Carol", "Dan", "Erin"]
+      }
+    ]
+  },
+  "steps": [
+    { "id": "parse-temporal", "description": "Resolve target_date to its containing week (Mon-Sun).", "kind": "deterministic" },
+    { "id": "apply-availability", "description": "Remove unavailable_resources from the assignable pool for that week.", "kind": "deterministic" },
+    { "id": "render-timeline", "description": "Render assignments as a weekly timeline keyed by day.", "kind": "deterministic" }
+  ],
+  "rules": [
+    "No unavailable resource may appear in any day's assignments.",
+    "Days are ordered Monday through Sunday."
+  ],
+  "output_contract": {
+    "schema_ref": "output.schema.json",
+    "summary": "A weekly timeline: ordered days, each with a list of assigned resources."
+  },
+  "acceptance_criteria": [
+    { "text": "Output covers exactly the seven days of the week containing target_date, ordered Monday->Sunday.", "check_type": "structural" },
+    { "text": "No resource listed in unavailable_resources appears in any day.", "check_type": "structural" },
+    { "text": "The timeline reads as a sensible, balanced schedule.", "check_type": "qualitative" }
+  ],
+  "semantic_steps": [],
+  "harness_type": "deterministic",
+  "target_runtime": "python"
+}

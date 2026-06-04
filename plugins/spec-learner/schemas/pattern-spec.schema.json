@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/ats-kinoshita-iso/spec-learner/schemas/pattern-spec.schema.json",
+  "title": "Pattern Spec (backend-neutral IR)",
+  "description": "Authoritative intermediate representation that backends compile into a concrete harness. Separates the invariant pattern from instance-specific values.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version",
+    "intent",
+    "input_contract",
+    "steps",
+    "output_contract",
+    "acceptance_criteria",
+    "semantic_steps",
+    "harness_type",
+    "target_runtime"
+  ],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "description": "Version of this spec schema the document targets.",
+      "const": "0.1.0"
+    },
+    "intent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One or two sentences: the invariant pattern, stated without any instance values."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Optional domain label, e.g. 'scheduling'. Used for harness output path."
+    },
+    "task": {
+      "type": "string",
+      "description": "Optional task slug. Used for harness output path."
+    },
+    "input_contract": {
+      "type": "object",
+      "description": "The shape of inputs, with each part explicitly marked variable or fixed.",
+      "additionalProperties": false,
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "type", "variability"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "type": {
+                "type": "string",
+                "description": "Logical type, e.g. string, number, date, array, object, file."
+              },
+              "variability": {
+                "type": "string",
+                "enum": ["variable", "fixed"],
+                "description": "variable = changes per run (a harness input dimension); fixed = constant across runs."
+              },
+              "description": { "type": "string" },
+              "example": {
+                "description": "Illustrative value. For 'fixed' fields this is the constant; for 'variable' fields this is one sample only and MUST NOT be hardcoded in the harness."
+              }
+            }
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered processing steps, each tagged deterministic or semantic.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "kind"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "kind": {
+            "type": "string",
+            "enum": ["deterministic", "semantic"],
+            "description": "deterministic = reproducible by code; semantic = needs a constrained model call or agent step."
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "description": "Constraints the output must satisfy (e.g. resource-availability, ordering).",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "output_contract": {
+      "type": "object",
+      "description": "Pointer to the concrete per-task output schema and a human summary.",
+      "additionalProperties": false,
+      "required": ["schema_ref"],
+      "properties": {
+        "schema_ref": {
+          "type": "string",
+          "description": "Relative path to this task's output.schema.json (authoritative for harness output validation)."
+        },
+        "summary": { "type": "string" }
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "description": "What made the output good — the user's answer to the one focused question. Each criterion is tagged structural (deterministic assert) or qualitative (judge subagent).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["text", "check_type"],
+        "properties": {
+          "text": { "type": "string", "minLength": 1 },
+          "check_type": {
+            "type": "string",
+            "enum": ["structural", "qualitative"],
+            "description": "structural = field equality/ordering/length/schema conformance (must hold on perturbed inputs); qualitative = LLM-as-judge."
+          }
+        }
+      }
+    },
+    "semantic_steps": {
+      "type": "array",
+      "description": "Ids of steps that are irreducibly semantic. Must be a subset of steps[].id with kind=semantic. Empty array is allowed (pure-deterministic pattern).",
+      "items": { "type": "string" }
+    },
+    "harness_type": {
+      "type": "string",
+      "enum": ["deterministic", "hybrid", "agentic"],
+      "description": "deterministic = no real semantic step; hybrid = scaffold + 1-2 schema-validated model calls; agentic = open-ended agent loop reproduced as a recipe."
+    },
+    "target_runtime": {
+      "type": "string",
+      "enum": ["python", "typescript", "claude-code"],
+      "description": "Chosen from harness_type plus the user's ecosystem."
+    }
+  }
+}
