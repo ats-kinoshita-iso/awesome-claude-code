@@ -1,0 +1,6 @@
+{
+  "backend": "hybrid-python",
+  "generated_by": "spec-learner",
+  "domain": "scheduling",
+  "task": "weekly-timeline"
+}

@@ -22,4 +22,12 @@ exits non-zero on any schema violation. Never emit malformed output.
 **Variable dimensions:** exactly the `input_contract` fields marked `variable`.
 No instance value from the original session may appear in the code.
 
-> Status: reference stub. Backend code lands in Milestone 2.
+**Codegen model:** `emit` generates a deterministic *scaffold* (CLI, IO + schema
+validation, one function stub per step, golden/perturbed test scaffolds); Claude
+fills the deterministic step bodies and structural assertions from the spec. Step
+functions share a `state` dict seeded with `state["input"]`; the final step sets
+`state["output"]`, which `run.py` validates.
+
+> Status: implemented (Milestone 2). Worked end-to-end example:
+> `harnesses/scheduling/weekly-timeline/`. Package dir is `backends/hybrid_python/`
+> (underscore) for importability.

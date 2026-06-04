@@ -21,4 +21,8 @@ non-zero on any schema violation.
 
 **Variable dimensions:** exactly the `input_contract` fields marked `variable`.
 
-> Status: reference stub. Backend code lands in Milestone 2.
+> Status: reference stub. **Deferred** past Milestone 2 (which shipped
+> `hybrid-python` only). The backend interface in `backends/base.py` is stable, so
+> this slots in later without changing existing code. There is no technical
+> blocker to a future `hybrid-typescript` either — the model-call wrapper just has
+> a TypeScript counterpart — it was scoped out, not ruled out.

@@ -1,0 +1,28 @@
+name: spec-learner
+
+# Standalone CI for the spec-learner plugin, scoped to its own tree and
+# decoupled from the repository's curation `make ci`.
+on:
+  push:
+    paths:
+      - "plugins/spec-learner/**"
+      - ".github/workflows/spec-learner.yml"
+  pull_request:
+    paths:
+      - "plugins/spec-learner/**"
+      - ".github/workflows/spec-learner.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install jsonschema pytest
+      - name: Validate the example spec
+        run: python plugins/spec-learner/scripts/validate.py plugins/spec-learner/examples/scheduling/pattern-spec.json
+      - name: Run the plugin test suite
+        run: python -m pytest plugins/spec-learner -q
